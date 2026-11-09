@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+read -p "Введите имя пользователя: " name
+
+user_id=$(id -u $name)
+user_dir=$(grep $name /etc/passwd | cut -d: -f6)
+user_group=$(id -G $name)
+
+echo $user_id $user_dir $user_group
+
+read -p "Что поменять? uid; homedir; group: " choice
+
+if [ $choice = uid ]
+then
+	read -p "Введите желаемый uid: " user_uid
+	if ! grep $user_uid /etc/passwd
+	then
+		usermod -u "$user_uid" "$name"
+	else 
+		echo Такой uid занят. Можете попробовать ввести еще раз!
+	fi
+elif [ $choice = homedir ] 
+then
+	read -p "Введите желаемую директорию: " dir
+	if [ -d "$dir" ]
+	then 
+		usermod -m -d "$dir" "$name"
+	else
+		echo Такой директории не существует
+	fi
+elif [ $choice = "group" ]
+then	
+	read -p "Введите имя группы: " group_name
+	read -p "Меняем основную или или дополнительную osnv; dop: " group_ch
+	if [ "$group_ch" = osnv ]
+	then 
+		usermod -g "$group_name" "$name"
+	elif [ "$group_ch" = dop ]
+	then
+		usermod -aG "$group_name" "$name"
+	else
+		echo Такого выбора нет
+	fi
+fi 
+
+

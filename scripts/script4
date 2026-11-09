@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+oldIFS=$IFS
+IFS=$'\n'
+
+for number in $(cat file_user)
+do
+	echo Creating new user: useradd $number
+done
+
+IFS=$oldIFS

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+read -p "Введите имя пользователя: " name
+param=$(id -u $name)
+if id $name &> /dev/null
+then
+	if [ $param = 0  ]
+	then
+		echo Пользователь $name - является админом
+	else 
+		echo Пользователь "$name" - не является админом
+	fi
+else
+	echo Пользователь $name - не существует
+fi

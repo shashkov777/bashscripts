@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+read -p "Введите имя пользователя: " name
+
+if id $name &> /dev/null
+then
+	if [ $name = root ]
+	then
+		direct="/root/.bash_history"
+	else
+		direct="/home/$name/.bash_history"
+	fi
+
+	if grep sudo "$direct" &> /dev/null
+	then
+		echo Пользователь $name пользовался sudo
+	else
+		echo Пользователь $name не пользовался sudo
+	fi
+else
+	echo Пользователя с именем $name не существует 
+fi
